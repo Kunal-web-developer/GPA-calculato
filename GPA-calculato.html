@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f4f4f9;
+        }
+
+        .calculator {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+        }
+
+        .calculator h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .semester {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .semester input {
+            width: 45%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="calculator">
+        <h1>GPA Calculator</h1>
+
+        <div id="semesters">
+            <div class="semester">
+                <input type="number" class="sgpa" placeholder="SGPA" step="0.01">
+                <input type="number" class="credits" placeholder="Credits" step="1">
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button id="addSemester">Add Semester</button>
+            <button id="calculateGPA">Calculate GPA</button>
+        </div>
+
+        <div id="result">Result: </div>
+    </div>
+
+    <script>
+        const semestersDiv = document.getElementById('semesters');
+        const addSemesterButton = document.getElementById('addSemester');
+        const calculateGPAButton = document.getElementById('calculateGPA');
+        const resultDiv = document.getElementById('result');
+
+        // Function to add a new semester input row
+        addSemesterButton.addEventListener('click', () => {
+            const semesterDiv = document.createElement('div');
+            semesterDiv.className = 'semester';
+            semesterDiv.innerHTML = `
+                <input type="number" class="sgpa" placeholder="SGPA" step="0.01">
+                <input type="number" class="credits" placeholder="Credits" step="1">
+            `;
+            semestersDiv.appendChild(semesterDiv);
+        });
+
+        // Function to calculate the GPA
+        calculateGPAButton.addEventListener('click', () => {
+            const sgpaInputs = document.querySelectorAll('.sgpa');
+            const creditInputs = document.querySelectorAll('.credits');
+
+            let totalWeightedSGPA = 0;
+            let totalCredits = 0;
+
+            // Loop through all semesters and calculate totals
+            for (let i = 0; i < sgpaInputs.length; i++) {
+                const sgpa = parseFloat(sgpaInputs[i].value);
+                const credits = parseInt(creditInputs[i].value);
+
+                if (!isNaN(sgpa) && !isNaN(credits)) {
+                    totalWeightedSGPA += sgpa * credits;
+                    totalCredits += credits;
+                }
+            }
+
+            // Calculate GPA
+            if (totalCredits > 0) {
+                const gpa = (totalWeightedSGPA / totalCredits).toFixed(2);
+                resultDiv.innerText = `Result: GPA = ${gpa}`;
+            } else {
+                resultDiv.innerText = 'Result: Please enter valid SGPA and Credits!';
+            }
+        });
+    </script>
+</body>
+
+</html>
